@@ -1,0 +1,45 @@
+<?php
+use INTRA\Controller\Action;
+use INTRA\Model\Container;
+if (!isset($_SESSION)) {session_start();}
+
+?>
+<script src="ajax.js"></script>
+<div class="row">
+    <div class="col-lg-3 container text-center">
+        <a href="/intranet"><img alt="Brand" src="../img/intranetmenu.png"></a>
+    </div>
+    <div class="col-lg-6">
+        <h4 class="text-center bg-dark container" style="color:#F5F505;border: 2px solid black;">
+            Monitoramento das Atividades Home Office
+        </h4>
+	<div class="container">
+		<div class="row">
+			<label class="col-lg-4 col-form-label labelformprod" style="font-size: 20px;">Funcionário: </label>
+			<select class="form-control col-lg-4" name="user" id="user">
+				<option style="color:gray;" value="">Selecione</option>
+				<?php
+					$user = Container::getModel('Usuario');
+					$funcionarios = $user->buscaFuncionarios($_SESSION['id']);
+					foreach ($funcionarios as $key => $func) {
+						echo "<option value='".$func->id."'>".$func->nome."</option>";
+					}
+				?>			
+			</select>
+		</div>
+		<br>
+		<div class="row">
+			<label class="col-lg-4 col-form-label labelformprod" style="font-size: 20px;">Data: </label>
+			<input  type="date" id="data" class="form-control col-lg-4">
+		</div>
+		<button type="button" id="pesquisar" class="btn btn-success"><i class="fa fa-search" aria-hidden="true"></i> Pesquisar</button>
+		
+	</div>
+    </div>
+    <div class="col-lg-3 container text-center">
+        <a class="btn btn-warning" href="/ho"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Voltar</a>
+    </div>
+    <div class="container">
+		<div class="container" id="dadosHoras"></div>	
+	</div>
+</div>

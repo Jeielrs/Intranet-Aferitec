@@ -1,0 +1,199 @@
+
+<div class="container">
+  	<div class="row">
+        <div class="col-3 align-self-start">
+          <h3 class="apresentacao"><?php echo $_SESSION['nome'];?></h3>
+          <h3><?php echo $_SESSION['dpto']; ?></h3>
+        </div>
+  		<div class="col-6 align-self-center">
+  			<h2 class="text-center titulao">intranet aferitec</h2>
+  		</div>
+  		<div class="col-3 align-self-end">
+  			<a class="text-center exit" href="/sair">sair</a>
+  		</div>
+  	</div>
+</div>
+
+<div class="album py-5 bg-light">
+    <div class="container">
+
+      	<div class="container">
+      	  	<div class="row">
+      	    	<div class="col-lg-5"></div>
+      	    	<div class="col-lg-4"></div>
+      	    	<div class="col-12 col-lg-3">
+      	        	<label class="labelform">Pesquisar ramais: </label>
+      	        	<input type="search" name="ramal" id="ramal" list="ramais" placeholder="ramal, nome ou dpto" class="custom-select">
+              		<datalist id="ramais">
+                		<option value="511 - Recepção"></option>
+                		<?php 
+                			foreach ($this->view->ramais as $key => $ramal) {
+                				echo "<option value='".$ramal['ramal']." - ".$ramal['nome']." - ".
+                						$ramal['dpto']."'></option>";
+                			}
+                		?>
+              		</datalist>
+          		</div>
+        	</div>
+      	</div>
+
+      	<div class="row">
+
+      	  <div class="col-md-4">
+      	    <div class="card mb-4 shadow-sm cartao">
+      	      <div class="card-body">
+      	        <a href="/pdr" style="text-decoration: none">
+      	        	<img src="img/pedidos.png" class="img-fluid" alt="Responsive image"><hr>
+      	        	<h2>Portal de Requisições</h2>
+      	        </a>
+      	      </div>
+      	    </div>
+      	  </div>
+
+          <div class="col-md-4">
+            <div class="card mb-4 shadow-sm cartao">
+              <div class="card-body">
+                <a href='http://intranet.aferitec.br:2020/PMD' target="blank" style='text-decoration: none'>
+                  <img src="img/PMD.png" class="img-fluid" alt="Responsive image"><hr>          
+                  <h2>Portal de Melhorias e Desenv.</h2>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="card mb-4 shadow-sm cartao">
+              <div class="card-body">
+                  <a href='/ho' style='text-decoration: none'>
+                      <img src="img/homeoffice.png" class="img-fluid" alt="Responsive image"><hr>            
+                      <h2>Atividades Home Office</h2>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="card mb-4 shadow-sm cartao">
+              <div class="card-body">
+                <a href="https://app.omie.com.br/my-apps" target='blank' style="text-decoration: none">
+                  <img src="img/omie.jpg" class="img-fluid" alt="Responsive image"><hr>
+                  <h2>Omie</h2>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="card mb-4 shadow-sm cartao">
+              <div class="card-body">
+                <a href="/geiko" target='blank' style="text-decoration: none">
+                  <img src="img/geiko.png" class="img-fluid" alt="Responsive image"><hr>
+                  <h2>Geiko</h2>
+                </a>
+              </div>
+            </div>
+          </div>
+
+        	<div class="col-md-4">
+        	  <div class="card mb-4 shadow-sm cartao">
+        	    <div class="card-body">
+        	      <a href="https://trello.com" target='blank' style="text-decoration: none">
+        	        <img src="img/trello.png" class="img-fluid" alt="Responsive image"><hr>
+        	        <h2>Trello</h2>
+        	      </a>
+        	    </div>
+        	  </div>
+        	</div>
+
+        	<div class="col-md-4">
+        	  <div class="card mb-4 shadow-sm cartao">
+        	    <div class="card-body">
+        	      <a href="http://www.centraldepostagens.com.br" target='blank' 
+        	      style="text-decoration:none">
+        	        <img src="img/Central_de_Postagens.png" class="img-fluid" alt="Responsive image"><hr>
+        	        <h2>Central de Postagens</h2>
+        	      </a>
+        	    </div>
+        	  </div>
+        	</div>
+
+        	<div class="col-md-4">
+        	  <div class="card mb-4 shadow-sm cartao">
+        	    <div class="card-body">
+        	      <a href="https://app.arquivei.com.br/dashboard/new" target='blank' style="text-decoration:none">
+        	        <img src="img/arquivei.png" class="img-fluid" alt="Responsive image"><hr>
+        	        <h2>Arquivei.com</h2>
+        	      </a>
+        	    </div>
+        	  </div>
+        	</div>
+
+        	<div class="col-md-4">
+        	  <div class="card mb-4 shadow-sm cartao">
+        	    <div class="card-body">
+        	      <a href="/xmlfinder" target="blank" style="text-decoration: none">
+        	        <img src="img/nfe.jpg" class="img-fluid" alt="Responsive image"><hr>
+        	        <h2>Buscador NFe Legado</h2>
+        	      </a>
+        	    </div>
+        	  </div>
+        	</div>
+
+        	<div class="col-md-4">
+        	  <div class="card mb-4 shadow-sm cartao">
+        	    <div class="card-body">
+        	      <a href="http://www.caliweb.com.br/aferitec" target='blank' style="text-decoration: none">
+        	        <img src="img/caliweb.png" class="img-fluid" alt="Responsive image"><hr>
+        	        <h2>CaliWeb</h2>
+        	      </a>
+        	    </div>
+        	  </div>
+        	</div>
+
+        	<div class="col-md-4">
+        	  <div class="card mb-4 shadow-sm cartao">
+        	    <div class="card-body">
+        	      <a href="https://qualp.com.br" target='blank' style="text-decoration: none">
+        	        <img src="img/qualp.png" class="img-fluid" alt="Responsive image"><hr>
+        	        <h2>QUALP</h2>
+        	      </a>
+        	    </div>
+        	  </div>
+        	</div>
+
+        	<div class="col-md-4">
+        	  <div class="card mb-4 shadow-sm cartao">
+        	    <div class="card-body">
+        	      <a href="https://drive.google.com" target='blank' style="text-decoration: none">
+        	        <img src="img/drive.png" class="img-fluid" alt="Responsive image"><hr>
+        	        <h2>Google Drive</h2>
+        	      </a>
+        	    </div>
+        	  </div>
+        	</div>
+
+        	<div class="col-md-4">
+        	  <div class="card mb-4 shadow-sm cartao">
+        	    <div class="card-body">
+        	      <a href="http://10.10.1.6/" target='blank' style='text-decoration: none'>
+        	      	<img src="img/teampass.png" class="img-fluid" alt="Responsive image"><hr>
+        	        <h2 class="h">TeamPass</h2>
+        	      </a>
+        	    </div>
+        	  </div>
+        	</div>
+
+        	<div class="col-md-4">
+        	  <div class="card mb-4 shadow-sm cartao">
+        	    <div class="card-body">
+        	      <a href="https://www.voeazul.com.br" target='blank' style='text-decoration: none'>
+        	        <img src="img/azul.png" class="img-fluid" alt="Responsive image"><hr>
+        	        <h2 class="h">Azul</h2>
+        	      </a>
+        	    </div>
+        	  </div>
+        	</div>
+          
+        </div>
+    </div>
+</div>

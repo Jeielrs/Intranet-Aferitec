@@ -1,0 +1,96 @@
+<?php 
+$this->menu(); 
+$categorias = json_decode($this->categorias());
+$projetos = json_decode($this->projetos());
+?>
+<div class="container">
+    <form class="row" action="/criaRC" method="POST" enctype="multipart/form-data">
+
+ <!------------------------------ Coluna dos itens------------------------------------->
+                            <script src="ajax.js"></script>
+      <div class="col-lg-6">
+        <div class="container" id="loading" style="display: none;">
+          <img src="img/loading.gif" class="rounded mx-auto d-block">
+          <h3 class="text-center">Carregando Itens do Omie...</h3>
+        </div>
+        <div class="container" id="conteudo"></div>
+        <div class="container" id="pergunta" style="display: none;">
+          <div id="form">
+            <div class="container row">
+              <div class="col-auto">
+                <label class='labelformprod'>Escolha o nº de itens diferentes:</label>
+              </div>              
+              <div class="col-auto">
+                <select class="form-control" id="numitens">
+                  <option value="">-- Selecione</option>
+                  <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                  <option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="buttonInsert">
+          <div class="row container justify-content-center">
+            <h5>Primeiro, vamos adicionar os itens!</h5>
+          </div>
+          <div class="row container justify-content-center">
+            <button type="button" class="btn-lg btn-success" onclick="exibir('pergunta')"><i class="fa fa-plus-circle" aria-hidden="true"></i> Inserir Itens</button>
+          </div>
+        </div>
+        <input type="hidden" id="numeroitens" name="numitens"> <!-- p/ receber name via jquery no ajax.js-->
+
+        <div class="container" id="content"></div>
+      
+
+        </div>
+
+                <!-----------------------coluna requisição--------------------->
+        <div class="col-lg-6">
+          <div class="container">
+              <label class="labelform">Categoria:</label>
+              <input type="search" name="categoria" list="categoria" placeholder="Pesquisar categoria" class="custom-select" required>
+              <datalist id="categoria">
+                <?php
+                  foreach ($categorias as $key => $cat) {
+                      echo "<option value='".$cat."'></option>";
+                  }
+                ?>
+              </datalist>
+          </div>
+        
+          <div class="container">
+            <label class="labelform">Departamento:</label>
+            <input type="search" name="dpto" list="dpto" placeholder="Pesquisar departamento" class="custom-select" required>
+            <datalist id="dpto">
+              <?php
+                foreach ($projetos as $key => $proj) {                    
+                      echo "<option value='".$proj->codigo ." - " . $proj->descricao."'></option>";
+                }
+              ?>
+            </datalist>
+          </div>
+
+          <div class="container">
+              <label class="labelform">Observação:</label>
+              <textarea class="form-control" id="obs" name="obs" rows="5" pattern="[a-zA-Z0-9]+" placeholder="Insira aqui uma obs sobre a requisição." required></textarea>
+          </div>
+
+          <div class="container">
+            <label class="labelform">Sugestão de Entrega:</label>
+            <input type="date" name="entrega" class="form-control" min='01-01-2020' max='31-12-2022'>
+          </div>
+
+          <div class="container">
+            <label class="labelform">Anexos:</label>
+            <input type="hidden" name="MAX_FILE_SIZE" value="419430400">
+            <input type="file" class="form-control" name="arquivo[]" multiple="multiple" id="selecao-arquivo">
+           </div>
+        </div>
+
+        <div class="row container justify-content-center">
+            <button type='submit' class='btn btn-primary'>Cadastrar</button>       
+        </div>
+
+    </form>
+</div>

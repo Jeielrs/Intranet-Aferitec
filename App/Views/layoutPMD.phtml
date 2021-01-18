@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang='pt-br'>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+    	<!-- As 3 meta tags acima *devem* vir em primeiro lugar dentro do `head`; qualquer outro conteúdo deve vir *após* essas tags -->
+    	<title>..:PMD:..</title>
+    	<!-- Bootstrap -->
+
+    	<!--favicon-->
+    	<link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon" /> 
+
+    	<link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">        
+    	<link href="https://fonts.googleapis.com/css?family=Staatliches" rel="stylesheet">
+    	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+    	<link href="https://fonts.googleapis.com/css?family=Righteous" rel="stylesheet">
+    	<link href="https://fonts.googleapis.com/css?family=Molengo" rel="stylesheet">
+    	<link href="https://fonts.googleapis.com/css?family=Ubuntu+Condensed" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css?family=Teko&display=swap" rel="stylesheet">
+    	<link rel="stylesheet" type="text/css" href="css/estilo.css">
+      <script src="https://code.jquery.com/jquery-3.4.1.js"
+                integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+                crossorigin="anonymous">
+      </script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+    	<script src="https://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
+
+      <script type="text/javascript">
+        function inserePergunta(){
+          var div = document.getElementById('divMotivo');
+          div.style.display='block';
+        }
+        function retiraPergunta(){
+          var div = document.getElementById('divMotivo');
+          div.style.display='none';
+        }
+
+      </script>
+
+   		<script language="JavaScript">
+   		 
+   		     //função do purpose
+   		     $(function () {
+   		     $('[data-toggle="popover"]').popover()
+   		     })
+
+   		</script>
+
+      
+
+    	<!-- HTML5 shim e Respond.js para suporte no IE8 de elementos HTML5 e media queries -->
+    	<!-- ALERTA: Respond.js não funciona se você visualizar uma página file:// -->
+    	<!--[if lt IE 9]>
+    	  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    	  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    	<![endif]-->
+  	</head>
+    <body class="bg-light">
+
+        <?= $this->content() ?>
+    </body>
+
+        <!-- jQuery (obrigatório para plugins JavaScript do Bootstrap) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Inclui todos os plugins compilados (abaixo), ou inclua arquivos separadados se necessário -->
+    <script src="bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+
+  /////////////////////FUNÇÃO JS P/ CARREGAR radiobutton do tkt/////////////
+
+  $('#radioBtn a').on('click', function(){
+    var sel = $(this).data('title');
+    var tog = $(this).data('toggle');
+    $('#'+tog).prop('value', sel);
+
+    $('a[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').removeClass('active').addClass('notActive');
+    $('a[data-toggle="'+tog+'"][data-title="'+sel+'"]').removeClass('notActive').addClass('active');
+  })
+
+
+     /////////////////////FUNÇÃO JS COM AJAX E JQUERY P/ CARREGAR VARIAVEL $LINHA->ID/////////////
+
+      $(document).ready(function() {
+          $('#exemplomodal').modal('show');
+      })
+
+      $('#modalclose').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var recipient = button.data('whatever') // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods       instead.
+        var modal = $(this)
+        modal.find('.form-group input').val(recipient)
+      })
+
+                          //RESPOSTA//AJAAAX!!!//RESPOSTA//
+    function ajax(tkt){
+      var ajax = new XMLHttpRequest();
+      var resposta = document.getElementById("resposta_"+tkt).value;
+      var vars = "resposta="+resposta+"&tkt="+tkt;
+      ajax.open("POST", "includes/responder.php", true);
+      ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      ajax.onreadystatechange = function(){
+        if (ajax.readyState == 4 && ajax.status == 200) {
+          var data = ajax.responseText; //data é o que volta
+          //console.log(data);
+          //console.log(resposta);
+          document.getElementById("enviar_"+tkt).value = "Enviar";
+          document.getElementById("resposta_"+tkt).value = "";
+          document.getElementById("resp_"+tkt).innerHTML = data;
+        }
+      }
+      ajax.send(vars);  //aqui é o que envia
+      document.getElementById("enviar_"+tkt).value = "Enviando...";
+    }
+
+    </script>
+
+
+</html>

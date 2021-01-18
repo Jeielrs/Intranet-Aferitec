@@ -1,0 +1,19 @@
+{
+	"name": "intra/intranet",
+	"require": {
+		"php": ">= 7.0",
+		"phpmailer/phpmailer": "^6.1"
+	},
+	"authors": [
+		{
+			"name": "Jeiel Rodrigues",
+			"email": "jeielrdp@gmail.com"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"App\\": "App/",
+			"INTRA\\": "vendor/INTRA/"
+		}
+	}
+}

@@ -1,0 +1,85 @@
+<div class="row">
+    <div class="col-sm-3 container text-center">
+        <a href="/intranet"><img alt="Brand" src="../img/intranetmenu.png"></a>
+    </div>
+    <div class="col-sm-6">
+        <h4 class="text-center bg-dark container" style="color:#F5F505;border: 2px solid black;">
+            Controle de Atividades Home Office
+        </h4>
+    </div>
+    <div class="col-sm-3 container text-center">
+        <a class="btn btn-warning" href="/ho"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Voltar</a>
+    </div>
+</div>
+
+<div id='calendar'></div>
+
+<div class="modal fade" id="visualizar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static"> 
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Dia <span id='start'></span>
+                </h5>
+                <button type="button" onclick="atualiza()" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container" id="exibir">                    
+                    <div class="row container justify-content-center">
+                        <button type="button" id="mostrar" class="btn-lg btn-primary" onclick="exibir('cadastrados')">
+                            <i class="fa fa-eye" aria-hidden="true"></i> Exibir registros</button>
+                    </div>
+                </div>
+                <div class="container" id="cadastrados" style="display: none;">
+                    <span id="retornoAjax"></span>
+                </div>
+                <br>
+                <div class="formedit">
+                    <div class="container" id="horarios">
+                        <span id="msg-edit"></span>
+                    </div>
+                    <div class="container" id="registrar">
+                        <div class="row container justify-content-center">
+                            <button type="button" class="btn-lg btn-warning" onclick="exibir('formulario')"><i class="fa fa-clock-o" aria-hidden="true"></i> Registrar horário</button>
+                        </div>
+                    </div>
+                    <div class="container" id="formulario" style="display: none;">
+                        <form action="/marcaponto" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="data" id="start">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label labelformprod" style="font-size: 20px;">Tipo</label>
+                                <div class="col-sm-10">
+                                    <select name="tipo" class="form-control" id="tipo" required>
+                        <option style="color:gray;" value="">Selecione</option>
+                        <option style="font-weight:bold;color:#00ff00;"value="inicio">INÍCIO</option>
+                        <option style="font-weight:bold;color:#ff8000;"value="almoco">ALMOÇO</option>  
+                        <option style="font-weight:bold;color:#b3ff1a;"value="retorno">RETORNO</option>
+                        <option style="font-weight:bold;color:#b32400;"value="fim">FIM</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label labelformprod" style="font-size: 20px;">Atividades</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" id="atividades" name="atividades" rows="5" pattern="[a-zA-Z0-9]+"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label labelformprod" style="font-size: 20px;">Observações</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" id="obs" name="obs" rows="3" pattern="[a-zA-Z0-9]+"></textarea>
+                                </div>
+                            </div>
+                            <button type="submit" name="CadEvent" id="CadEvent" value="CadEvent" class="btn btn-success">Registrar</button>
+                        </form>                                
+                    </div>                                                        
+                </div>
+            </div>
+            <div class='modal-footer'>
+                <button type='button' onclick="atualiza()" class='btn btn-secondary' data-dismiss='modal'>Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>

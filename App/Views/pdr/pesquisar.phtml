@@ -1,0 +1,71 @@
+<?php 
+$this->menu();
+$formatter = new NumberFormatter('pt_BR',  NumberFormatter::CURRENCY);
+$codreq = $_POST['rc'];
+$pagina = $_POST['pagina'] ?? 1;
+
+if ($codreq == null or $codreq == 0) { 
+?>
+<script type="text/javascript">
+	$(document).ready(function(){
+    let pagina = <?php echo $pagina; ?>;
+    	$.ajax({
+      		type: 'POST',
+      		url: '/pesquisarAll',
+          data:`pagina=${pagina}`,
+      		dataType: "html"   
+    	}).done(function(data){     
+        	$("#conteudo1").html(data);
+        	console.log('carregado');
+      	})
+      	.fail(function(data){
+        	alert("Erro na requisição Ajax");
+      	})
+      	.always(function(){
+        	$("#loading").hide();
+      	});
+    });
+</script>
+
+<div class="container" id="conteudo1"></div>
+<div class="container" id="loading" style="display: block;">
+    <img src="img/loading.gif" class="rounded mx-auto d-block">
+    <h3 class="text-center">Pesquisando todas as suas Requisições...</h3>
+</div>
+
+<?php
+} else {
+?>
+<script type="text/javascript">
+	$(document).ready(function(){
+    	let rc = <?php echo $codreq; ?>;
+    	console.log(rc);
+    	$.ajax({
+      		type: 'POST',
+      		url: '/pesquisarRC',
+      		data:`rc=${rc}`,
+      		dataType: "html"   
+    	}).done(function(data){     
+        	$("#conteudo2").html(data);
+        	console.log('carregado');
+      	})
+      	.fail(function(data){
+        	alert("Erro na requisição Ajax");
+      	})
+      	.always(function(){
+        	$("#loading").hide();
+      	});
+    });
+</script>
+
+<div class="container" id="conteudo2"></div>
+<div class="container" id="loading" style="display: block;">
+    <img src="img/loading.gif" class="rounded mx-auto d-block">
+    <h3 class="text-center">Pesquisando Requisição Nº <?php echo $codreq; ?>...</h3>
+</div>
+
+
+
+<?php
+}
+?>

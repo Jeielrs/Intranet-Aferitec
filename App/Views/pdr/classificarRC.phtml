@@ -1,0 +1,163 @@
+<?php
+use INTRA\Model\Container;
+
+	if (!isset($_POST['conformidade'])) {
+		echo "
+        	<script type=\"text/javascript\">
+        		alert(\"Selecione uma opção e tente novamente!\");
+				history.go(-1)
+        	</script>
+        	";
+        exit();
+	}
+	elseif ($_POST['conformidade'] == 'nconforme') {
+		$rc = Container::getModel('RC');
+		$rc->__set('conformidade', "Recebido e  Não conforme");
+		$rc->__set('codreq', $_POST['codreq']);
+    $rc->__set('user_alter', $_SESSION['id']);
+    $rc->__set('dt_mov', date('Y-m-d H:i:s'));
+		$result_rc = $rc->attConformidade();
+		if (substr($result_rc, 0, 4) == 'Erro') {
+			echo '
+        	<script type=\"text/javascript\">
+        		alert(\"'.$result_rc.'\");
+				history.go(-1)
+        	</script>
+        	';
+        	exit();
+        }else {
+        	echo "
+        		<META HTTP-EQUIV=REFRESH CONTENT = '0;URL=http:/pdr'>
+        		<script type=\"text/javascript\">
+        		    alert(\"Conformidade da requisição atualizada com sucesso!\");
+        		</script>
+        		  ";
+        }
+	}if ($_POST['conformidade'] == 'nrecebido') {
+		$rc = Container::getModel('RC');
+		$rc->__set('conformidade', "Não Recebido");
+		$rc->__set('codreq', $_POST['codreq']);
+    $rc->__set('user_alter', $_SESSION['id']);
+    $rc->__set('dt_mov', date('Y-m-d H:i:s'));
+		$result_rc = $rc->attConformidade();
+		if (substr($result_rc, 0, 4) == 'Erro') {
+			echo '
+        	<script type=\"text/javascript\">
+        		alert(\"'.$result_rc.'\");
+				history.go(-1)
+        	</script>
+        	';
+        	exit();
+        }else {
+        	echo "
+        		<META HTTP-EQUIV=REFRESH CONTENT = '0;URL=http:/pdr'>
+        		<script type=\"text/javascript\">
+        		    alert(\"Conformidade da requisição atualizada com sucesso!\");
+        		</script>
+        		  ";
+        }
+	}elseif ($_POST['conformidade'] == 'conforme') {
+		$rc = Container::getModel('RC');
+		$rc->__set('conformidade', "Recebido e Conforme");
+		$rc->__set('codreq', $_POST['codreq']);
+    $rc->__set('user_alter', $_SESSION['id']);
+    $rc->__set('dt_mov', date('Y-m-d H:i:s'));
+		$result_rc = $rc->attConformidade();
+		if (substr($result_rc, 0, 4) == 'Erro') {
+			echo '
+        	<script type=\"text/javascript\">
+        		alert(\"'.$result_rc.'\");
+				history.go(-1)
+        	</script>
+        	';
+        	exit();
+        }else {
+        	echo "
+        		<script type=\"text/javascript\">
+        		    alert(\"Conformidade da requisição atualizada com sucesso.\");
+        		</script>
+        		<script type=\"text/javascript\">
+        		    alert(\"Por favor, conte agora como foi sua experiência com os Fornecedores dos produtos/serviços!\");
+        		</script>
+        		  ";
+        }
+	
+
+?>
+<div class="row">
+    <div class="col-sm-3 container text-center">
+        <a href="/intranet"><img alt="Brand" src="../img/intranetmenu.png"></a>
+    </div>
+    <div class="col-sm-6">
+        <h4 class="text-center bg-dark container" style="color:#F5F505;border: 2px solid black;">
+            Classificação de Provedores Externos
+        </h4>
+    </div>
+    <div class="col-sm-3 container text-center">
+        <a class="btn btn-warning" href="/pdr"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Voltar</a>
+    </div>
+</div>
+
+<div class="container">
+    <form action="/classifica" method="POST" enctype="multipart/form-data">
+    
+        <?php
+          	$itens_pedido = json_decode($this->listaPedidos($this->view->codreq));
+          	$i = 1;
+          	foreach ($itens_pedido as $key => $item) {
+          		echo '
+          	<table class="table table-borderless table-dark">
+          		<thead class="thead-dark">
+          			<tr>
+						<th><span style="color:#F5F505;">'.$item->fornecedor.'</span> ('.$item->descrprod.')</th>
+						<input type="hidden" name="fornec_'.$i.'" value="'.$item->fornecedor.'">
+						<input type="hidden" name="numfornec" value="'.$i.'">
+            <input type="hidden" name="codreq_'.$i.'" value="'.$_POST['codreq'].'">
+					</tr>
+        		  	<tr>
+        		  	  <th scope="col" class="text-center">Critérios</th>
+        		  	  <th scope="col" class="text-center">Ruim</th>
+        		  	  <th scope="col" class="text-center">Médio</th>
+        		  	  <th scope="col" class="text-center">Bom</th>
+        		  	</tr>             
+        		</thead>
+        		<tbody>
+          			<tr>
+          			  <td class="text-center">Prazo</td>
+          			  <td class="text-center"><input type="radio" name="prazo_'.$i.'" value="1"required></td>
+          			  <td class="text-center"><input type="radio" name="prazo_'.$i.'" value="2"required></td>
+          			  <td class="text-center"><input type="radio" name="prazo_'.$i.'" value="3"required></td>
+          			</tr>
+          			<tr>
+          			  <td class="text-center">Preço</td>
+          			  <td class="text-center"><input type="radio" name="preco_'.$i.'" value="1"required></td>
+          			  <td class="text-center"><input type="radio" name="preco_'.$i.'" value="2"required></td>
+          			  <td class="text-center"><input type="radio" name="preco_'.$i.'" value="3"required></td>
+          			</tr>
+          			<tr>
+          			  <td class="text-center">Qualidade</td>
+          			  <td class="text-center"><input type="radio" name="qualidade_'.$i.'" value="1"required></td>
+          			  <td class="text-center"><input type="radio" name="qualidade_'.$i.'" value="2"required></td>
+          			  <td class="text-center"><input type="radio" name="qualidade_'.$i.'" value="3"required></td>
+          			</tr>
+          			<tr>
+          			  <td colspan="4">
+          			  <label class="col-form-label e" style="font-weight: bold;">Observações: </label>
+          				<textarea class="form-control" name="obs_'.$i.'" rows="2"></textarea></td>
+          			</tr>
+				</tbody>
+			</table>
+          	';
+          	$i++;
+        }
+    ?>
+    	<div class="row container justify-content-center">
+        	<button type='submit' class='btn btn-primary'>Cadastrar</button>
+    	</div>
+
+	</form>
+
+</div>
+<?php
+	}
+?>  

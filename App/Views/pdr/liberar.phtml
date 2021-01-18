@@ -1,0 +1,310 @@
+<?php
+$this->menu();
+$lista = json_decode($this->listaLiberacao());
+$itens = json_decode($this->listaLiberacaoItens());
+$files = json_decode($this->listaLiberacaoFiles());
+$formatter = new NumberFormatter('pt_BR',  NumberFormatter::CURRENCY);
+$cont = count($lista);
+if ($cont >= 1) {
+    if ($cont == 1) {
+      $word = ' requisição pendente de liberação.';
+    }elseif ($cont > 1) {
+      $word = ' requisições pendentes de liberação.';
+    }
+    $saudacao = "há ".$cont.$word;
+} else {
+  $saudacao = "no momento não há nenhuma requisição pendente de liberação.";
+  echo "<div class='container'>
+          <h3 class='titulo'>".$this->saudacao()." " .$_SESSION['nome'].", ".$saudacao."</h3>
+        </div>";
+  exit();
+}
+?>
+<div class="container">
+
+    <div class="row justify-content-md-center">
+      <div class="col-sm-8 col-md-6 col-lg-7 col-xl-8">
+        <h3 class='titulo'><?php echo $this->saudacao()." " .$_SESSION['nome'].", ".$saudacao; ?></h3>
+      </div>
+      <div class="col-sm-4 col-md-6 col-lg-5 col-xl-4 text-right"> 
+          <button type="button" class="btn btn-sm btn-warning popover-test btn-cima" data-toggle="modal" data-target="#modalinstru" title="Instruções"><i class="fa fa-info" aria-hidden="true"></i> Instruções</button>
+      </div>
+    </div>  <!--final cabeçalho-->
+
+    <table class="table table-sm table-bordered table-responsive-sm table-hover ">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col" class="align-middle text-center dont-break-out">RC</th>
+          <th scope="col" class="align-middle text-center dont-break-out">DATA CRIAÇÃO</th>
+          <th scope="col" class="align-middle text-center dont-break">CATEGORIA</th>
+          <th scope="col" class="align-middle text-center dont-break">USUÁRIO</th>
+          <th scope="col" class="align-middle text-center dont-break">VALOR TOTAL</th>
+          <th scope="col" class="align-middle text-center dont-break">OPÇÕES</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+        	<?php
+        		$n = 1;
+        		foreach ($lista as $key => $rc) {
+        			echo '
+
+        	<td class="align-middle text-center dont-break">'.$rc->codreq.'</td>
+          	<td class="align-middle text-center dont-break">'.date("d/m/Y H:i:s", strtotime($rc->dt_create)).'</td>
+          	<td class="align-middle text-center dont-break-out">'.$rc->categoria.'</td>
+          	<td class="align-middle text-center dont-break-out">'.$rc->nome.'</td>
+          	<td class="align-middle text-center dont-break">'.$formatter->formatCurrency($rc->total, "BRL").'</td>
+          	<td class="align-middle text-center dont-break-out">            
+            	<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-tt="tooltip" data-placement="left" title="VISUALIZAR" data-target="#modalvisu'.$rc->codreq.'">
+              		<i class="fa fa-eye" aria-hidden="true"></i>
+            	</button>
+            	<button type="button" class="btn btn-sm btn-dark" data-toggle="modal" data-tt="tooltip" data-placement="right" title="LIBERAR / REPROVAR" data-target="#modaledit'.$rc->codreq.'">
+              		<i class="fa fa-random" aria-hidden="true"></i>
+            	</button>
+          	</td>
+        </tr>
+        			';
+        			$n++;
+        		}
+
+        	?>
+      </tbody>
+    </table>
+
+
+</div>  <!--final container principal-->
+
+
+<!------------------------------------------------------------------------------------------------------------------------------------------- INICIO MODAL VISUALIZAR ------------------------------------------------------------------------------------------------------------------------------------------------------->
+<?php foreach ($lista as $key => $modal) { ?>
+
+<div class='modal fade' id='modalvisu<?php echo $modal->codreq; ?>' tabindex='-1' role='dialog' aria-labelledby='exampleModalLongTitle' aria-hidden= 'true'>
+  <div class='modal-dialog modal-lg modal-dialog-centered' role='document'>
+    <div class='modal-content'>
+
+      <div class='modal-header'>
+        <h3 class='modal-title' id='exampleModalLongTitle'>
+          RC <?php echo $modal->codreq; ?>
+        </h3>
+        <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+          <span aria-hidden='true'>&times;</span>
+        </button>
+      </div>    
+
+      <div class='modal-body'>
+
+        <div class="row">
+          <div class="col-lg-9">
+            <div class="container">
+              <h3>Anexos</h3>
+              <div class="row">
+                <?php
+                  foreach ($files as $key => $file) {
+                    $img = $this->img_file($file->extension);
+                    if ($file->codreq == $modal->codreq) {
+                      if ($file->filename != '') {
+                ?>
+                <div class="col-md-3">
+                  <?php
+                  echo "<a href='anexosPDR/" . $file->codreq . "_" . $file->id_file . "." . $file->extension . "' target='_blank' class='link_arquivo'>
+                          <div class='divAnexos'>
+                            <p class='dont-break-out'>$img $file->filename</p>
+                          </div>
+                        </a>";
+                ?>
+                </div>
+                <?php } else {
+                  echo "<div class='container'><p>Sem anexos</p></div>";
+                } 
+              } } //fechamento do if e foreach?>
+              </div>
+            </div>
+
+            <table class="table table-sm table-bordered table-responsive-sm table-hover">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col" class="align-middle text-center dont-break-out">ITEM</th>
+                  <th scope="col" class="align-middle text-center dont-break">ESPECIFICAÇÃO</th>
+                  <th scope="col" class="align-middle text-center dont-break-out">PREÇO UNIT.</th>
+                  <th scope="col" class="align-middle text-center dont-break">QTD</th>
+                  <th scope="col" class="align-middle text-center dont-break">TOTAL</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <?php
+                    foreach ($itens as $key => $item) {
+                      if ($item->codreq == $modal->codreq) {
+                  ?>
+                      <td class="align-middle text-center dont-break">
+                        <?php echo $item->descrprod; ?>
+                      </td>
+                      <td class="align-middle text-center dont-break-out">
+                        <?php echo $item->obsitem; ?>
+                      </td>
+                      <td class="align-middle text-center dont-break">
+                        <?php echo $formatter->formatCurrency($item->precounit, "BRL"); ?>
+                      </td>
+                      <td class="align-middle text-center dont-break">
+                        <?php echo $item->qtde; ?>
+                      </td>
+                      <td class="align-middle text-center dont-break">
+                        <?php echo $formatter->formatCurrency($item->total, "BRL"); ?>
+                      </td>
+                    </tr>
+                  <?php } }//fechamento do if e do foreach?>
+              </tbody>
+            </table>
+         
+          </div> <!---------------------------------------------fim col-lg-8-->
+      
+          <div class="col-lg-3">
+    
+            <div class="divVisu">
+              <div class="divLabelVisu">
+                <span class="labelVisu2">SOLICITANTE</span>
+              </div>
+              <div class="pVisu">
+                <p class="dont-break-out"><?php echo $modal->nome; ?></p>
+              </div>
+            </div>
+
+            <div class="divVisu">
+              <div class="divLabelVisu">
+                <span class="labelVisu2">DEPARTAMENTO</span>
+              </div>
+              <div class="pVisu">
+                <p class="dont-break-out"><?php echo $modal->departamento; ?></p>
+              </div>
+            </div>
+    
+            <div class="divVisu">
+              <div class="divLabelVisu">
+                <span class="labelVisu2">DATA SUGESTÃO</span>
+              </div>
+              <div class="pVisu">
+                <p class="dont-break-out"><?php echo date("d/m/Y", strtotime($modal->dtsugestao)); ?></p>
+              </div>
+            </div>
+
+            <div class="divVisu">
+              <div class="divLabelVisu">
+                <span class="labelVisu2">OBSERVAÇÃO</span>
+              </div>
+              <div class="pVisu">
+                <p class="dont-break-out"><?php echo $modal->obs; ?></p>
+              </div>
+            </div>
+
+            <div class="divVisu">
+              <div class="divLabelVisu">
+                <span class="labelVisu2">STATUS</span>
+              </div>
+              <div class="pVisu">
+                <p class="dont-break-out"><?php echo $modal->descricao; ?></p>
+              </div>
+            </div>
+
+            <?php if (isset($modal->alterador)) { ?>
+              <div class="divVisu">
+                <div class="divLabelVisu">
+                  <span class="labelVisu2">ALTERADO POR</span>
+                </div>
+                <div class="pVisu">
+                  <p class="dont-break-out"><?php echo $modal->alterador; ?></p>
+                </div>
+              </div>
+
+              <div class="divVisu">
+                <div class="divLabelVisu">
+                  <span class="labelVisu2">DATA ALTERAÇÃO</span>
+                </div>
+                <div class="pVisu">
+                  <p class="dont-break-out"><?php echo date("d/m/Y H:i:s", strtotime($modal->dt_mov)); ?></p>
+                </div>
+              </div>
+            <?php }?> 
+
+          </div>  <!--------------------------------------- fim class col-lg-3-->
+        </div>    <!--------------------------------------- fim class row-->
+      </div>      <!--------------------------------------- fim class modal body -->
+      
+      <div class='modal-footer'>
+        <button type='button' class='btn btn-secondary' data-dismiss='modal'>Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!----------------------------------- FIM MODAL VISUALIZAR ---------------------------------------->
+
+
+
+<!-------------------------------------------------------------------------------------------------------------------------------------------  INICIO MODAL LIBERAR ---------------------------------------------------------------------------------------------------------------------------------------------------->
+<div class="modal fade" id="modaledit<?php echo $modal->codreq; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"                   >
+    <div class="modal-dialog" role="document">
+      	<div class="modal-content">
+        	<div class="modal-header">
+          		<h3 class="modal-title" id="exampleModalLabel">
+            		Requisição de Compra Nº <?php echo $modal->codreq; ?>
+          		</h3>
+          		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+            </div>
+            <div class="modal-body">
+            	<form class="form-classific" action="/liberaRC" method="POST">
+                    <div class="form-group">
+                        <input type="hidden" value="<?php echo $modal->codreq; ?>" name="codreq">
+                        <input type='checkbox' name='liberar' value='1'> <span class="text-success font-weight-bold">Liberar</span><br>
+                        <label class="col-form-label">Observação: </label><br>
+                        <textarea name="obs_aprov" class="form-control" rows="4"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                    <div class="form-group">
+                      <input type='checkbox' name='reprovar' value='2'> <span class="text-danger font-weight-bold">Reprovar</span><br>
+                      <label class="col-form-label">Motivo da Reprovação: </label><br>
+                      <textarea name='motivo' class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class='modal-footer'>
+                      <button type='button' class='btn btn-secondary' data-dismiss='modal'>Fechar</button>
+                      <button type='submit' class='btn btn-primary'>Confirmar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-------------------------------------  FIM MODAL LIBERAR ---------------------------------------->
+
+
+<!----------------------------------------------------------------------------------------------------------------------------------------------INICIO MODAL INSTRUÇÕES ------------------------------------------------------------------------------------------------------------------------------------------------->
+<div class="modal fade" id="modalinstru" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-" role="document">
+    <div class="modal-content">
+      <div class='modal-header'>
+        <h3 class='modal-title' id='exampleModalLongTitle'>
+          Instruções de Uso:
+        </h3>
+        <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+          <span aria-hidden='true'>&times;</span>
+        </button>
+      </div> 
+      <div class="modal-body">
+              <p>Aqui você pode efetuar a liberação ou a reprovação da Requisição de Compra.</p>
+              <br>              
+              <p><i class="fa fa-info-circle text-warning" aria-hidden="true"></i>
+              	Clique em <i class="fa fa-eye" aria-hidden="true"></i> para conferir todas as informações referentes à RC.</p>
+              <br>              
+              <p><i class="fa fa-info-circle text-warning" aria-hidden="true"></i>
+              	Clique em <i class="fa fa-random text-dark" aria-hidden="true"></i> para definir o destino das RCs.</p>
+              	<p>&nbsp;&nbsp;&nbsp; - Ao clicar em Liberar, o portal enviará a RC liberada para Aprovação do Gerente Geral.</p>
+              	<p>&nbsp;&nbsp;&nbsp; - Clicando em Reprovar o portal deixará a RC com status de reprovada, solicitando que o usuário solicitante refaça com as correções, ou efetue o cancelamento da RC.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-------------------------------------  FIM MODAL INSTRUÇÕES ---------------------------------------->
+
+<?php } ?>

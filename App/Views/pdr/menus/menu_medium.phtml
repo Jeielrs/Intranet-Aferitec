@@ -1,0 +1,150 @@
+<?php
+$listaLiberacao = json_decode($this->listaLiberacao());
+$countLiberacao = '';
+if ($_SESSION['nivel'] == 'supervisor') {
+  $countLiberacao = count($listaLiberacao);
+  }
+?>
+<nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand logomenu" href="/intranet">
+      <img alt="Brand" src="../img/intranetmenu.png">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/pdr">
+          <i class="fa fa-file-text"></i>
+          Requisições
+          </a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/nova_rc">
+          <i class="fa fa-plus-square-o"></i>
+          Criar RC
+          </a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/liberar">
+          <i class="fa fa-unlock">
+            <?php 
+            if ($countLiberacao > 0) {
+              if ($countLiberacao > 10) {
+                echo '<span class="badge badge-danger">'.$countLiberacao.'</span>';
+              } else {
+                echo '<span class="badge badge-warning">'.$countLiberacao.'</span>';
+              }
+            }
+            ?>
+          </i>
+          Liberar RC
+        </a>
+      </li>
+      <li class="nav-item disabled">
+        <a class="nav-link" href="#">
+          <i class="fa fa-thumbs-o-up">
+          </i>
+          Aprovar RC
+        </a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/provedores">
+          <i class="fa fa-users">
+          </i>
+          Provedores
+        </a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/relatorios">
+          <i class="fa fa-book" aria-hidden="true">
+            <span class="badge badge-success">!</span>
+          </i>
+          Relatórios
+        </a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" data-toggle="modal" data-tt="tooltip" data-placement="right" title="Versão" data-target="#modalsobre">
+          <i class="fa fa-info">
+          </i>
+          Sobre
+        </a>
+      </li>
+      <!--li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-envelope-o">
+            <span class="badge badge-primary">11</span>
+          </i>
+          Dropdown
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li-->
+      <li class="nav-item disabled">
+        <a class="nav-link" data-toggle="modal" data-tt="tooltip" data-placement="right" title="SINCRONIZAR" data-target="#modalsincronizar">
+          <i class="fa fa-cloud-download" aria-hidden="true">
+          </i>
+          Omie
+        </a>
+      </li>  
+    </ul>
+    <ul class="navbar-nav mr-auto">
+      <form class="form-inline my-2 my-lg-0" action="/pesquisar" method="POST" >
+        <input class="form-control mr-sm-2" type="number" name="rc" placeholder="Pesquisar RC" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+      </form>
+    </ul>
+    <ul class="navbar-nav">    
+      <li class="nav-item active">
+          <a class="nav-link" href="/sair">
+            <i class="fa fa-share">
+            </i>
+            Sair
+          </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+                          <script src="ajax.js"></script>
+<!------------------------------------------------------------------------------------------------------------------------------------------------------INICIO MODAL SOBRE ------------------------------------------------------------------------------------------------------------------------------------------------->
+<div class="modal fade" id="modalsobre" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class='modal-header'>
+        <h3 class='modal-title' id='exampleModalLongTitle'>
+          SOBRE
+        </h3>
+        <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+          <span aria-hidden='true'>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-dark">
+          <tr>
+            <th scope="row">Software: </th>
+            <th>PDR - Portal de Requisições</th>
+          </tr>
+          <tr>
+            <th scope="row">Versão:  </th>
+            <th>2.4</th>
+          </tr>
+          <tr>
+            <th scope="row">Manual:  </th>
+            <th><a href="IT-003_Portal de Requisições.pdf"  target="blank" >Acessar</a></th>
+          </tr>
+          <tr>
+            <th scope="row">Suporte:</th>
+            <th><a href="mailto:ti@aferitec.com.br?subject=Dúvida no PDR">ti@aferitec.com.br</a> <br> (19)9 9921-6546</th>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-------------------------------------  FIM MODAL SINCRONIZAR ---------------------------------------->

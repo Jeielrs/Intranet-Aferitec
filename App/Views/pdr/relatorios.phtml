@@ -1,0 +1,278 @@
+<?php 
+use INTRA\Model\Pagination;
+use INTRA\Model\Container;
+
+$this->menu();
+$objSolicit = json_decode($this->solicitantes());
+$solicitantes = array();
+$x = 0;
+foreach ($objSolicit as $key => $sol) {
+  $solicitantes[$x] = $sol->nome;
+  $x++;
+}
+sort($solicitantes);
+$categorias = json_decode($this->categorias());
+$departamentos = json_decode($this->projetos());
+$produtos = $this->produtos();
+$provedores = $this->provedoresClassificados();
+
+?>
+<div class="container">
+    <div class="row">
+
+      <div class="col-auto my-1">
+        <input placeholder="DATA INICIAL" class="form-control custom-select-sm" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="dtIniCreate">
+      </div>
+
+      <div class="col-auto my-1">
+        <input placeholder="DATA FINAL" class="form-control custom-select-sm" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="dtFimCreate">
+      </div>
+
+      <div class="col-auto my-1">
+        <input type="search" id="solicitante" list="solicitantes" placeholder="SOLICITANTE" class="form-control custom-select-sm">
+        <datalist id="solicitantes">
+          <?php
+            foreach ($solicitantes as $key => $sol) {
+              echo "<option value='".$sol."'></option>";
+            }
+          ?>
+        </datalist>        
+      </div>
+
+      <div class="col-auto my-1">
+        <input type="search" id="liberador" list="liberadores" placeholder="LIBERADOR" class="form-control custom-select-sm">
+        <datalist id="liberadores">
+          <option value='MAICON'></option>
+          <option value='ROBERTO'></option>
+          <option value='WANDERSON'></option>
+        </datalist>        
+      </div>
+
+      <div class="col-auto my-1">
+        <input type="search" id="categoria" list="categorias" placeholder="CATEGORIA" class="form-control custom-select-sm">
+        <datalist id="categorias">
+          <?php
+            foreach ($categorias as $key => $cat) {
+              echo "<option value='".$cat."'></option>";
+            }
+          ?>
+        </datalist>        
+      </div>
+
+      <div class="col-auto my-1">
+        <input type="search" id="departamento" list="departamentos" placeholder="DEPARTAMENTO" class="form-control custom-select-sm">
+        <datalist id="departamentos">
+          <?php
+            foreach ($departamentos as $key => $depto) {
+              echo "<option value='".$depto->codigo ." - " . $depto->descricao."'></option>";
+            }
+          ?>
+        </datalist>        
+      </div>
+
+      <div class="col-auto my-1">
+        <input type="search" id="status" list="fase" placeholder="STATUS" class="form-control custom-select-sm">
+        <datalist id="fase">
+          <option value="1 - Aguardando Liberação"></option>
+          <option value="2 - Aguardando Aprovação"></option>
+          <option value="3 - Aprovada"></option>
+          <option value="4 - Em processo de compra"></option>
+          <option value="5 - Inspeção"></option>
+          <option value="6 - Encerrada"></option>
+          <option value="7 - Reprovada"></option>
+          <option value="8 - Cancelada"></option>
+        </datalist>        
+      </div>
+
+      <div class="col-auto my-1">
+        <input type="search" id="classificacao" list="classify" placeholder="CLASSIFICACAO" class="form-control custom-select-sm">
+        <datalist id="classify">
+          <option value='Recebido e Conforme'></option>
+          <option value='Recebido e Não Conforme'></option>
+          <option value='Não Recebido'></option>
+        </datalist>        
+      </div>
+
+      <div class="col-auto my-1">
+        <input type="search" id="alterador" list="alteradores" placeholder="ALTERADO POR ÚLT." class="form-control custom-select-sm">
+        <datalist id="alteradores">
+          <?php
+            foreach ($solicitantes as $key => $alterador) {
+              echo "<option value='".$alterador."'></option>";
+            }
+          ?>
+        </datalist>        
+      </div>
+
+      <div class="col-auto my-1">
+        <input type="search" id="produto1" list="produtos" placeholder="PRODUTO 1" class="form-control custom-select-sm">
+        <datalist id="produtos">
+          <?php
+            foreach ($produtos as $key => $produto) {
+              echo '<option value="'.$produto['codigo_omie'].' - '.$produto['descricao'].'"></option>';
+            }
+          ?>
+        </datalist>        
+      </div>
+
+      <div class="col-auto my-1">
+        <input type="search" id="produto2" list="produtos" placeholder="PRODUTO 2" class="form-control custom-select-sm">
+        <datalist id="produtos">
+          <?php
+            foreach ($produtos as $key => $produto) {
+              echo '<option value="'.$produto['codigo_omie'].' - '.$produto['descricao'].'"></option>';
+            }
+          ?>
+        </datalist>        
+      </div>
+
+      <div class="col-auto my-1">
+        <input type="search" id="produto3" list="produtos" placeholder="PRODUTO 3" class="form-control custom-select-sm">
+        <datalist id="produtos">
+          <?php
+            foreach ($produtos as $key => $produto) {
+              echo '<option value="'.$produto['codigo_omie'].' - '.$produto['descricao'].'"></option>';
+            }
+          ?>
+        </datalist>        
+      </div>
+
+      <div class="col-auto my-1">
+        <input type="search" id="produto4" list="produtos" placeholder="PRODUTO 4" class="form-control custom-select-sm">
+        <datalist id="produtos">
+          <?php
+            foreach ($produtos as $key => $produto) {
+              echo '<option value="'.$produto['codigo_omie'].' - '.$produto['descricao'].'"></option>';
+            }
+          ?>
+        </datalist>        
+      </div>
+
+      <div class="col-auto my-1">
+        <input type="search" id="produto5" list="produtos" placeholder="PRODUTO 5" class="form-control custom-select-sm">
+        <datalist id="produtos">
+          <?php
+            foreach ($produtos as $key => $produto) {
+              echo '<option value="'.$produto['codigo_omie'].' - '.$produto['descricao'].'"></option>';
+            }
+          ?>
+        </datalist>        
+      </div>
+
+      <div class="col-auto my-1">
+        <input type="search" id="provedor" list="provedores" placeholder="FORNECEDOR" class="form-control custom-select-sm">
+        <datalist id="provedores">
+          <?php
+            foreach ($provedores as $key => $prov) {
+              echo "<option value='".$prov->provedor."'></option>";
+            }
+          ?>
+        </datalist>        
+      </div>
+
+      <?php
+        if (isset($_POST['sql']) and isset($_POST['paginaAtual'])) {
+
+          //echo "<pre>";print_r($_POST);
+
+          //PAGINAÇÃO
+          $rc = Container::getModel('RC');
+          $qtd = $rc->buscaQueryPronta($_POST['sql_qtd']);
+          $qtd = $qtd[0]->qtd;          
+          $objPagination = new Pagination($qtd, $_POST['paginaAtual'] ?? 1);
+          $limite = $objPagination->getLimit();
+          $limite = explode(',', $limite);
+          $inicio = $limite[0];   //posição que se inicia a consulta
+          $limiteReg = $limite[1];  //limite maximo de registros por pagina
+          $paginas = $objPagination->getPages();
+      
+          $sql_pronta = $_POST['sql'] . " LIMIT ".$inicio.", ".$limiteReg." ";
+          $consulta = $rc->buscaQueryPronta($sql_pronta);
+          //print_r($sql_pronta);
+
+          echo '<div class="col-auto my-1">
+                  <a href="/relatorios" class="btn-sm btn-warning" id="voltarFiltros">Voltar</button>
+                  </a>
+                </div>';
+
+          echo '<form class="form-inline" method="POST" action="/relatorios">
+            <input type="hidden" name="sql" value="'.$_POST["sql"].'">
+            <input type="hidden" name="sql_qtd" value="'.$_POST["sql_qtd"].'">';
+
+          foreach ($paginas as $key => $pagina) {
+            if ($pagina['atual'] == 1) {
+              echo '<button type="submit" name="paginaAtual" value="'.$pagina['pagina'].'" class="btn mx-1 my-1 btn-sm      btn-primary">'.$pagina['pagina'].'</button>';
+            } else {
+              echo '<button type="submit" name="paginaAtual" value="'.$pagina['pagina'].'" class="btn mx-1 my-1 btn-sm btn-dark">'.$pagina['pagina'].'</button>';
+              }
+          }
+
+          echo '</form>';
+          echo '
+            <table class="table table-sm table-bordered table-responsive table-hover" style="white-space: nowrap;">
+                  <thead class="thead-dark">
+                    <tr>
+                        <th scope="col" class="align-middle text-center">RC</th>
+                        <th scope="col" class="align-middle text-center">COD OMIE</th>
+                        <th scope="col" class="align-middle text-center">DESCRIÇÃO ITEM</th>
+                        <th scope="col" class="align-middle text-center">OBS ITEM</th>
+                        <th scope="col" class="align-middle text-center">STATUS</th>
+                        <th scope="col" class="align-middle text-center">DT CRIAÇÃO</th>
+                        <th scope="col" class="align-middle text-center">DT MOVIMENT.</th>
+                        <th scope="col" class="align-middle text-center">DT SUGESTÃO</th>
+                        <th scope="col" class="align-middle text-center">SOLICITANTE</th>
+                        <th scope="col" class="align-middle text-center">LIBERADOR</th>
+                        <th scope="col" class="align-middle">OBSERVAÇÃO</th>
+                        <th scope="col" class="align-middle text-center">CONFORMIDADE</th>
+                        <th scope="col" class="align-middle text-center">ÚLTIMA ALTERAÇÃO</th>
+                        <th scope="col" class="align-middle text-center">MOTIVO REPROVAÇÃO</th>
+                        <th scope="col" class="align-middle text-center">PREÇO UNIT.</th>
+                        <th scope="col" class="align-middle text-center">QTD</th>
+                        <th scope="col" class="align-middle text-center">FORNECEDOR</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+          ';
+          foreach ($consulta as $key => $linha) {
+            echo '
+              <td class="text-center">'.$linha->codreq.'</td>
+              <td class="text-center">'.$linha->cod_omie.'</td>
+              <td class="text-center" style="max-width:700px; overflow:hidden; text-overflow:ellipsis;">'.$linha->descrprod.'</td>
+              <td class="text-center" style="max-width:700px; overflow:hidden; text-overflow:ellipsis;">'.$linha->obsitem.'</td>
+              <td class="text-center">'.$linha->descricao.'</td>
+              <td class="text-center">'.date("d/m/Y h:i:s", strtotime($linha->dt_create)).'</td>
+              <td class="text-center">'.date("d/m/Y h:i:s", strtotime($linha->dt_mov)).'</td>
+              <td class="text-center">'.date("d/m/Y", strtotime($linha->dtsugestao)).'</td>
+              <td class="text-center">'.$linha->solicitante.'</td>
+              <td class="text-center">'.$linha->owner.'</td>
+              <td class="text-center" style="max-width:700px; overflow:hidden; text-overflow:ellipsis;">'.$linha->obs.'</td>
+              <td class="text-center">'.$linha->conformidade.'</td>
+              <td class="text-center">'.$linha->alterador.'</td>
+              <td class="text-center" style="max-width:700px; overflow:hidden; text-overflow:ellipsis;">'.$linha->motivo_rep.'</td>
+              <td class="text-center">'.$linha->precounit.'</td>
+              <td class="text-center">'.$linha->qtde.'</td>
+              <td class="text-center">'.$linha->fornecedor.'</td>
+            </tr>
+            ';
+          }
+          echo "</tbody>
+              </table>";
+        }else {
+      ?>
+
+      <div class="col-auto my-1">
+        <button type="submit" class="btn-sm btn-primary" id="filtroRelatorio">Filtrar</button>
+      </div>
+
+    </div>
+
+    <div class="container" id="loading" style="display: none;">
+        <img src="img/loading.gif" class="rounded mx-auto d-block">
+        <h3 class="text-center">Carregando...</h3>
+    </div>
+    <?php } ?>
+
+    <div id="content"></div>
+  
+</div>

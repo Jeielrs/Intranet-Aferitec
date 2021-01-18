@@ -1,0 +1,87 @@
+<?php 
+$this->menu();
+$provedores = $this->provedoresClassificados();
+?>
+<script src="ajax.js"></script>
+<div class="container">
+	<h2 class="text-center">Monitoramento de Provedores Externos</h2>
+	<br><br>
+	<div class="row">
+		<div class="col-md-3" id="selecao">
+			<p class="text-center bg-success text-light">Atualize a página antes de alternar entre filtros!</p>
+			<label class="labelform">Filtrar por:</label>
+			<select class="form-control" id="filtro">
+				<option value="0">---</option>
+				<option value="1">TUDO</option>
+				<option value="2">PROVEDOR</option>
+				<option value="3">REQUISIÇÃO</option>
+				<option value="4">DATA</option>
+			</select>
+
+		<br />
+
+			<div id="provedor" style="display: none;">
+				<form id="searchProvedor" action="/loadProvedor" method="POST">
+					<h6>Escolha um Provedor:</h6>
+					<input type="search" id="provedorAjax" list="prov" placeholder="Pesquisar provedores" class="custom-select" required>
+              		<datalist id="prov">
+              	  	  <?php
+              	    	foreach ($provedores as $key => $prov) {
+              	        	echo "<option value='".$prov->provedor."'></option>";
+              	    	}
+              	  	  ?>
+              		</datalist>
+              		<input type="hidden" id="filtroAjaxProvedor" value="2">
+              		<input type="submit" class="btn btn-primary" id="pesquisarProvedor" value="Pesquisar">
+				</form>				
+			</div>
+
+			<div id="rc" style="display: none;">
+				<form id="searchRC" action="/loadProvedor" method="POST">
+					<h6>Digite uma RC:</h6>
+					<input type="text" id="rcAjax" class="form-control">
+					<input type="hidden" id="filtroAjaxRC" value="3">
+					<input type="submit" class="btn btn-primary" id="pesquisarRC" value="Pesquisar">
+				</form>				
+			</div>
+
+			<div id="datas" style="display: none;">
+				<form id="searchData" action="/loadProvedor" method="POST">
+					<h6>Selecione o período:</h6>
+					<input type="date" id="date1" class="form-control">
+					<input type="date" id="date2" class="form-control">
+					<input type="hidden" id="filtroAjaxData" value="4">
+					<input type="submit" class="btn btn-primary" id="pesquisarData" value="Pesquisar">
+				</form>
+			</div>
+	
+		</div>
+		<div class="col-lg-9 border-info border-left" id="resultado">
+			<div class="container" id="loading" style="display: none;">
+          		<img src="img/loading.gif" class="rounded mx-auto d-block">
+          		<h3 class="text-center">Carregando...</h3>
+        	</div>
+        	<div class="row" id="graficos" style="display: none;">
+      			<div class="col-4">
+        			<canvas class="pie-chart1"></canvas>
+        			<h3 class="text-center">Preço</h3>
+      			</div>
+      			<div class="col-4">
+        			<canvas class="pie-chart2"></canvas>
+        			<h3 class="text-center">Prazo</h3>
+      			</div>
+      			<div class="col-4">
+        			<canvas class="pie-chart3"></canvas>
+        			<h3 class="text-center">Qualidade</h3>
+      			</div>
+    		</div>
+        	<div id="content"></div>
+		</div>
+	</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
