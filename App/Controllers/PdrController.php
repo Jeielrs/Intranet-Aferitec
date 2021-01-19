@@ -1406,30 +1406,40 @@ class PDRController extends Action {
 			$rc->__set('obs', $obs);
 			$rc->__set('status', 3);
 
-			$result_rc = $rc->aprovarRC();
-
 			$rc_api = Container::getModel('Api');
-			$rc_api->criaRC($_POST['codreq']);
+			$result_api = $rc_api->criaRC($_POST['codreq']);
+			$result_api = json_decode($result_api);
 
-			if (substr($result_rc, 0, 4) == 'Erro') {
+			if (isset($result_api->cCodStatus)) {
+				$result_rc = $rc->aprovarRC();	//atualiza no banco de dados para status 3 aprovado
+
+				if (substr($result_rc, 0, 4) == 'Erro') {
+					echo "
+					<h5 class='exit'>" . $result_rc . "</h5>
+        			<a type='button' href='/aprovar' class='btn-success'>Voltar</a>
+        		  	";
+				} else {
+					$erro = $this->notificaMail($busca['email'], "A", $_POST['codreq'], $busca['nome']);
+					if ($erro != 'OK') {
+						echo "<h5 class='exit'>Requisição aprovada com sucesso, porém: " . $erro . "</h5>
+						<a type='button' href='/aprovar' class='btn-success'>Voltar</a>";
+					} else {
+						echo "
+						<META HTTP-EQUIV=REFRESH CONTENT = '0;URL=http:/aprovar'>
+        				<script type=\"text/javascript\">
+        			    	alert(\"" . $result_rc . "\");
+        				</script>
+        			  	";
+					}
+				}
+				
+			} else {
 				echo "
-				<h5 class='exit'>" . $result_rc . "</h5>
+				<h5 class='exit'>Problemas foram encontrados ao sincronizar com o Omie, favor contaatar o Suporte!</h5>
         		<a type='button' href='/aprovar' class='btn-success'>Voltar</a>
         		  ";
-			} else {
-				$erro = $this->notificaMail($busca['email'], "A", $_POST['codreq'], $busca['nome']);
-				if ($erro != 'OK') {
-					echo "<h5 class='exit'>Requisição aprovada com sucesso, porém: " . $erro . "</h5>
-					<a type='button' href='/aprovar' class='btn-success'>Voltar</a>";
-				} else {
-					echo "
-					<META HTTP-EQUIV=REFRESH CONTENT = '0;URL=http:/aprovar'>
-        			<script type=\"text/javascript\">
-        			    alert(\"" . $result_rc . "\");
-        			</script>
-        			  ";
-				}
 			}
+
 
 		} elseif (!isset($_POST['aprovar']) and isset($_POST['reprovar']) and !isset($_POST['cancelar'])) {
 			$rc->__set('user_alter', $_SESSION['id']);

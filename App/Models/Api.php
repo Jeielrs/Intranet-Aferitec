@@ -193,6 +193,8 @@ class Api {
 
 		$result = $rc->IncluirReq($reqCad);
 
+		return json_encode($result);
+
 	}
 
 }
