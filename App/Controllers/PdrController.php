@@ -1087,7 +1087,7 @@ class PDRController extends Action {
 			}
 			elseif ($tipo == 'X') {
 								$mail->Subject = "RC's com erros";
-								$mail->Body = "<span style='font-size:14.0pt;color:#0B0B61'><p><b>Intranet Aferitec alerta:</span><br><br><span style='font-size:12.0pt;color:#0B0B61'>ADM, algumas requisições não conseguiram entrar no Omie quando foram aprovadas!<br> Utilize esse script no banco de dados pra identificá-las:<br>SELECT count(codreq) FROM rc WHERE status = 3 AND DATEDIFF(CURDATE(), dt_mov) > 5 </b></p></span><br>
+								$mail->Body = "<span style='font-size:14.0pt;color:#0B0B61'><p><b>Intranet Aferitec alerta:</span><br><br><span style='font-size:12.0pt;color:#0B0B61'>ADM, algumas requisições não conseguiram entrar no Omie quando foram aprovadas!<br> Utilize esse script no banco de dados pra identificá-las:<br>SELECT count(codreq) FROM rc WHERE status = 3 AND DATEDIFF(CURDATE(), dt_mov) > 15 </b></p></span><br>
 				            	<p><b><i><span style='font-size:9.0pt;color:#A6A6A6'>
 				            	Essa é uma  mensagem automática gerada pela Intranet.
 				            	<o:p></o:p></span></i></b></p>";
