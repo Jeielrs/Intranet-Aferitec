@@ -297,7 +297,7 @@ class ApiController extends Action {
 
 		//echo "<pre>" . print_r($requisicoes, true) . "</pre>";
 
-		//echo "<pre>" . print_r($pedidos, true) . "</pre>";
+		//echo "<pre><br>Pedidos::<br>" . print_r($pedidos, true) . "</pre>";
 
 		//criando array de pedidos (omie)
 		$x = 0;
@@ -318,16 +318,16 @@ class ApiController extends Action {
 				}
 			}
 		}
-		echo "<pre>" . print_r($array, true) . "</pre>";
+		//echo "<pre>" . print_r($array, true) . "</pre>";
 
 
 		//criando obj de dos itens da rc (PDR)
 		$itensRC = Container::getModel('itensRC');
 		$rc = Container::getModel('RC');
 		$array2 = $itensRC->buscaSincAllItens();
-		echo "<pre>" . print_r($array2, true) . "</pre>";
+		//echo "<pre>" . print_r($array2, true) . "</pre>";
 
-		//echo "<pre>" . print_r($pedidosFinalizados, true);exit();
+		echo "<pre>Pedidos finalizados::<br>" . print_r($pedidosFinalizados, true);//exit();
 
 
 		/*O script abaixo irá comparar apenas as rcs do PDR que estão como aprovadas junto
@@ -348,14 +348,16 @@ class ApiController extends Action {
 						$dt_create = new DateTime($pdr->dt_create);
 						$today = new DateTime(date('Y/m/d H:i:s'));
 						$interval = $dt_create->diff($today);
+						$dias = $interval->days;
 						//dias para ir para INSPEÇÃO:
-						if ($pdr->codprod == 'PRD00074' or $pdr->codprod == 'PRD00089'
-							or $pdr->codprod == 'PRD00073') {
+						if ($pdr->codprod == 'PRD00074' or $pdr->codprod == 'PRD00081' 
+								or $pdr->codprod == 'PRD00089'	or $pdr->codprod == 'PRD00073') {
 							$days = 3;
 						} else {
 							$days = 20;
 						}
-						if ($interval->days > $days) {
+						if ($dias > $days) {
+							echo "interval days = ".$interval->days." NO PEDIDO ".$finalizados['numPedido']."<br>";
 							if ($pdr->codprod == 'PRD00074' or $pdr->codprod == 'PRD00081' 
 								or $pdr->codprod == 'PRD00089'	or $pdr->codprod == 'PRD00073') {
 								$log .= $rc->alteraStatus($pdr->codreq, 6) . "<br>";

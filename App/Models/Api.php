@@ -53,8 +53,8 @@ class Api {
 		$request->nPagina = $pagina;
 		$request->nRegsPorPagina = 50;
 		$request->lApenasImportadoApi = 'N';
-		//$request->lExibirPedidosRecebidos = 'S';
-		//$request->lExibirPedidosPendentes = 'N';
+		//$request->lExibirPedidosRecebidos = 0;
+		//$request->lExibirPedidosPendentes = 0';
 
 		$result = $pedido->PesquisarPedCompra($request);
 
@@ -70,8 +70,8 @@ class Api {
 		$request->nPagina = $pagina;
 		$request->nRegsPorPagina = 50;
 		$request->lApenasImportadoApi = 'N';
-		//$request->lExibirPedidosRecebidos = 'S';
-		$request->lExibirPedidosPendentes = 'N';
+		//$request->lExibirPedidosRecebidos = 1;
+		$request->lExibirPedidosPendentes = 0;
 
 		$result = $pedido->PesquisarPedCompra($request);
 
