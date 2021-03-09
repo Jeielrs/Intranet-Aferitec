@@ -52,9 +52,14 @@ class Api {
 		$request = new com_pedido_pesquisar_request();
 		$request->nPagina = $pagina;
 		$request->nRegsPorPagina = 50;
-		$request->lApenasImportadoApi = 'N';
-		//$request->lExibirPedidosRecebidos = 0;
-		//$request->lExibirPedidosPendentes = 0';
+		$request->lApenasImportadoApi = 'F';
+		$request->lExibirPedidosPendentes = "T";
+		//$request->lExibirPedidosRecebidos = "F";
+		//$request->lExibirPedidosFaturados = "F";
+		//$request->lExibirPedidosCancelados = "F";
+		//$request->lExibirPedidosEncerrados = "F";
+		//$request->dDataInicial = "01/01/2021";
+		//$request->dDataFinal = "31/12/2021";
 
 		$result = $pedido->PesquisarPedCompra($request);
 
@@ -70,8 +75,8 @@ class Api {
 		$request->nPagina = $pagina;
 		$request->nRegsPorPagina = 50;
 		$request->lApenasImportadoApi = 'N';
-		//$request->lExibirPedidosRecebidos = 1;
-		$request->lExibirPedidosPendentes = 0;
+		$request->lExibirPedidosPendentes = "T";
+		//$request->lExibirPedidosRecebidos = "T";
 
 		$result = $pedido->PesquisarPedCompra($request);
 
