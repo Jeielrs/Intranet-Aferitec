@@ -35,9 +35,7 @@ class Classe extends ApiController {
 		$data = date("d-m-Y");
 		$hora = date('H:i');
 
-		if ($hora == "04:30") {
-			$texto = $this->sincRequisicao();
-		} elseif ($hora == "04:00") {
+		if (/*$hora == "04:00"*/ 1 == 1) {
 			$texto = $this->sincPedido();
 		} elseif ($hora == "05:00") {
 			$texto = $this->sincronizar(); //(produtos)

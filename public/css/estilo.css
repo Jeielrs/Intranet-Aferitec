@@ -497,3 +497,12 @@ input[type='file'] {
 td {
 	font-size: 10pt;"
 }
+
+.botoes_paginacao {
+	margin: 0;
+  	padding: 0;
+  	white-space: nowrap;
+  	height: 60px;
+  	overflow-y: auto;
+  	overflow-x: auto;
+

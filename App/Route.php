@@ -198,6 +198,12 @@ class Route extends Bootstrap {
 			'action' => 'buscaRelatorio',
 		);
 
+		$routes['gerarPlanilha'] = array(
+			'route' => '/gerarPlanilha',
+			'controller' => 'PdrController', 
+			'action' => 'gerarPlanilha',
+		);
+
 		/*----------API---------------*/
 
 		$routes['loadBoxProd'] = array(

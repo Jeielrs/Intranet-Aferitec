@@ -32,12 +32,16 @@ class Api {
 
 	public static function PesquisarReq($pagina) {
 
+		$data_inicial = date("d/m/Y", strtotime("-6 months"));
+
 		$rc = new RequisicaoCompraJsonClient();
 
 		$request = new rcListarRequest();
 		$request->pagina = $pagina;
-		$request->registros_por_pagina = 50;
+		$request->registros_por_pagina = 100;
 		$request->apenas_importado_api = 'N';
+		$request->filtrar_por_data_de = $data_inicial;
+		$request->filtrar_por_data_ate = '31/12/2050';
 
 		$result = $rc->PesquisarReq($request);
 
@@ -47,6 +51,8 @@ class Api {
 
 	public static function PesquisarPedCompra($pagina) {
 
+		$data_inicial = date("d/m/Y", strtotime("-15 days"));
+
 		$pedido = new PedidoCompraJsonClient();
 
 		$request = new com_pedido_pesquisar_request();
@@ -54,12 +60,12 @@ class Api {
 		$request->nRegsPorPagina = 50;
 		$request->lApenasImportadoApi = 'F';
 		$request->lExibirPedidosPendentes = "T";
-		//$request->lExibirPedidosRecebidos = "F";
-		//$request->lExibirPedidosFaturados = "F";
-		//$request->lExibirPedidosCancelados = "F";
-		//$request->lExibirPedidosEncerrados = "F";
-		//$request->dDataInicial = "01/01/2021";
-		//$request->dDataFinal = "31/12/2021";
+		$request->lExibirPedidosRecebidos = "T";
+		$request->lExibirPedidosFaturados = "T";
+		$request->lExibirPedidosCancelados = "T";
+		$request->lExibirPedidosEncerrados = "T";
+		$request->dDataInicial = $data_inicial;
+		$request->dDataFinal = "31/12/2050";
 
 		$result = $pedido->PesquisarPedCompra($request);
 
@@ -69,14 +75,21 @@ class Api {
 
 	public static function PesquisarPedCompraFinalizados($pagina) {
 
+		$data_inicial = date("d/m/Y", strtotime("-15 days"));
+
 		$pedido = new PedidoCompraJsonClient();
 
 		$request = new com_pedido_pesquisar_request();
 		$request->nPagina = $pagina;
 		$request->nRegsPorPagina = 50;
-		$request->lApenasImportadoApi = 'N';
-		$request->lExibirPedidosPendentes = "T";
-		//$request->lExibirPedidosRecebidos = "T";
+		$request->lApenasImportadoApi = 'F';
+		$request->lExibirPedidosPendentes = "F";
+		$request->lExibirPedidosRecebidos = "T";
+		$request->lExibirPedidosFaturados = "T";
+		$request->lExibirPedidosCancelados = "T";
+		$request->lExibirPedidosEncerrados = "T";
+		$request->dDataInicial = $data_inicial;
+		$request->dDataFinal = "31/12/2050";
 
 		$result = $pedido->PesquisarPedCompra($request);
 

@@ -12,8 +12,8 @@ $cont = 0;
     <div class="row justify-content-md-center">
       <div class="col-sm-8 col-md-6 col-lg-7 col-xl-8">
         <?php if ($_SESSION['id'] == 4 or $_SESSION['id'] == 38)
-          {$qtdmeses = 3;} else{$qtdmeses = 4;} ?>
-        <h3 class='titulo'><?php echo $this->saudacao() . " " . $_SESSION['nome']; ?>, essas são as suas requisições nos últimos <?php echo $qtdmeses;?> meses.</h3>
+          {$qtdmeses = 3;} else{$qtdmeses = 12;} ?>
+        <h3 class='titulo'><?php echo $this->saudacao() . " " . $_SESSION['nome']; ?>, essas são as suas requisições ativas dos últimos <?php echo $qtdmeses;?> meses, requisições finalizadas, reprovadas ou canceladas ficam disponíveis por 60 dias</h3>
       </div>
       <div class="col-sm-4 col-md-6 col-lg-5 col-xl-4 text-right">
           <button type="button" class="btn btn-sm btn-warning popover-test btn-cima" data-toggle="modal" data-target="#modalinstru" title="Instruções"><i class="fa fa-info" aria-hidden="true"></i> Instruções</button>          

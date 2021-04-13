@@ -193,11 +193,20 @@ $provedores = $this->provedoresClassificados();
           echo '<div class="col-auto my-1">
                   <a href="/relatorios" class="btn-sm btn-warning" id="voltarFiltros">Voltar</button>
                   </a>
-                </div>';
+                </div>
+                <br>
+                <div class="container"><div class="row"><div class="col">
+                    <form name="form" action="/gerarPlanilha" method="post">
+                      <input type="hidden" name="sql" value="'.$_POST['sql'].'">
+                      <button type="submit" class="btn-sm btn-success" target="blank">Gerar Excel</a>
+                    </form>
+                </div></div></div>
+                ';
 
           echo '<form class="form-inline" method="POST" action="/relatorios">
             <input type="hidden" name="sql" value="'.$_POST["sql"].'">
-            <input type="hidden" name="sql_qtd" value="'.$_POST["sql_qtd"].'">';
+            <input type="hidden" name="sql_qtd" value="'.$_POST["sql_qtd"].'">
+            <div class="container botoes_paginacao">';
 
           foreach ($paginas as $key => $pagina) {
             if ($pagina['atual'] == 1) {
@@ -207,8 +216,8 @@ $provedores = $this->provedoresClassificados();
               }
           }
 
-          echo '</form>';
-          echo '
+          echo '</div>
+                </form>
             <table class="table table-sm table-bordered table-responsive table-hover" style="white-space: nowrap;">
                   <thead class="thead-dark">
                     <tr>
@@ -222,8 +231,12 @@ $provedores = $this->provedoresClassificados();
                         <th scope="col" class="align-middle text-center">DT SUGESTÃO</th>
                         <th scope="col" class="align-middle text-center">SOLICITANTE</th>
                         <th scope="col" class="align-middle text-center">LIBERADOR</th>
-                        <th scope="col" class="align-middle">OBSERVAÇÃO</th>
+                        <th scope="col" class="align-middle" style="max-width: 100px;">OBSERVAÇÃO</th>
                         <th scope="col" class="align-middle text-center">CONFORMIDADE</th>
+                        <th scope="col" class="align-middle text-center">NOTA PREÇO</th>
+                        <th scope="col" class="align-middle text-center">NOTA PRAZO</th>
+                        <th scope="col" class="align-middle text-center">NOTA QUALIDADE</th>
+                        <th scope="col" class="align-middle text-center">OBS CLASSIF.</th>
                         <th scope="col" class="align-middle text-center">ÚLTIMA ALTERAÇÃO</th>
                         <th scope="col" class="align-middle text-center">MOTIVO REPROVAÇÃO</th>
                         <th scope="col" class="align-middle text-center">PREÇO UNIT.</th>
@@ -248,6 +261,10 @@ $provedores = $this->provedoresClassificados();
               <td class="text-center">'.$linha->owner.'</td>
               <td class="text-center" style="max-width:700px; overflow:hidden; text-overflow:ellipsis;">'.$linha->obs.'</td>
               <td class="text-center">'.$linha->conformidade.'</td>
+              <td class="text-center">'.$linha->preco.'</td>
+              <td class="text-center">'.$linha->prazo.'</td>
+              <td class="text-center">'.$linha->qualidade.'</td>
+              <td class="text-center">'.$linha->obs_classif.'</td>
               <td class="text-center">'.$linha->alterador.'</td>
               <td class="text-center" style="max-width:700px; overflow:hidden; text-overflow:ellipsis;">'.$linha->motivo_rep.'</td>
               <td class="text-center">'.$linha->precounit.'</td>

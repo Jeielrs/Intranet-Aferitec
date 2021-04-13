@@ -555,13 +555,14 @@ class PDRController extends Action {
 					$produto5 = str_replace("or", "and", $produto5);
 				}
 
-			$sql = "SELECT rc.codreq, rc.cod_omie, cat.descricao, dpto.descricao, rc.dt_create, rc.dt_mov, rc.dtsugestao, solicitante.nome AS solicitante, rc.owner, rc.obs, status.descricao, rc.conformidade, alterador.nome AS alterador, rc.motivo_rep, item.descrprod, item.obsitem, item.precounit, item.qtde, item.fornecedor FROM rc AS rc 
+			$sql = "SELECT rc.codreq, rc.cod_omie, cat.descricao, dpto.descricao, rc.dt_create, rc.dt_mov, rc.dtsugestao, solicitante.nome AS solicitante, rc.owner, rc.obs, status.descricao, rc.conformidade, clasf.preco, clasf.prazo, clasf.qualidade, clasf.obs as obs_classif, alterador.nome AS alterador, rc.motivo_rep, item.descrprod, item.obsitem, item.precounit, item.qtde, item.fornecedor FROM rc AS rc 
 				INNER JOIN itens_rc AS item ON rc.codreq =  item.codreq
 				INNER JOIN usuarios AS  solicitante ON solicitante.id = rc.id_user
 				LEFT JOIN usuarios AS alterador ON alterador.id = rc.user_alter
 				INNER JOIN categoria AS cat ON cat.codigo = rc.categoria
 				INNER JOIN departamento AS dpto ON dpto.codigo = rc.dpto
 				INNER JOIN rc_status AS status ON status.id = rc.status
+				LEFT JOIN classif_provedores AS clasf ON clasf.codreq = rc.codreq
 				WHERE rc.codreq > 200000 
 				";
 
@@ -572,6 +573,7 @@ class PDRController extends Action {
 				INNER JOIN categoria AS cat ON cat.codigo = rc.categoria
 				INNER JOIN departamento AS dpto ON dpto.codigo = rc.dpto
 				INNER JOIN rc_status AS status ON status.id = rc.status
+				LEFT JOIN classif_provedores AS clasf ON clasf.codreq = rc.codreq
 				WHERE rc.codreq > 200000 ";
 
 			if ($dtIniCreate != null) { $sql .= $dtIniCreate; $sql_qtd .= $dtIniCreate; }
@@ -610,9 +612,16 @@ class PDRController extends Action {
 ?>
 
 <?php
-		echo '<form class="form-inline" method="POST" action="/relatorios">
+		echo '<div class="container"><div class="row"><div class="col">
+                    <form name="form" action="/gerarPlanilha" method="post">
+                      <input type="hidden" name="sql" value="'.$sql.'">
+                      <button type="submit" class="btn-sm btn-success" target="blank">Gerar Excel</a>
+                    </form>
+                </div></div></div>
+                <form class="form-inline" method="POST" action="/relatorios">
 				<input type="hidden" name="sql" value="'.$sql.'">
-				<input type="hidden" name="sql_qtd" value="'.$sql_qtd.'">';
+				<input type="hidden" name="sql_qtd" value="'.$sql_qtd.'">
+				<div class="container botoes_paginacao">';
 
 		foreach ($paginas as $key => $pagina) {
 			if ($pagina['atual'] == 1) {
@@ -622,7 +631,7 @@ class PDRController extends Action {
 				echo '<button type="submit" name="paginaAtual" value="'.$pagina['pagina'].'" class="btn mx-1 my-1 btn-sm btn-dark">'.$pagina['pagina'].'</button>';
 			}
 		}
-		echo '</form>';
+		echo '</div></form>';
 		echo '
 		<table class="table table-bordered table-responsive table-hover" style="white-space: nowrap;">
                   <thead class="thead-dark">
@@ -639,6 +648,10 @@ class PDRController extends Action {
                         <th scope="col" class="align-middle text-center">LIBERADOR</th>
                         <th scope="col" class="align-middle" style="max-width: 100px;">OBSERVAÇÃO</th>
                         <th scope="col" class="align-middle text-center">CONFORMIDADE</th>
+                        <th scope="col" class="align-middle text-center">NOTA PREÇO</th>
+                        <th scope="col" class="align-middle text-center">NOTA PRAZO</th>
+                        <th scope="col" class="align-middle text-center">NOTA QUALIDADE</th>
+                        <th scope="col" class="align-middle text-center">OBS CLASSIF.</th>
                         <th scope="col" class="align-middle text-center">ÚLTIMA ALTERAÇÃO</th>
                         <th scope="col" class="align-middle text-center">MOTIVO REPROVAÇÃO</th>
                         <th scope="col" class="align-middle text-center">PREÇO UNIT.</th>
@@ -663,6 +676,10 @@ class PDRController extends Action {
               <td class="text-center">'.$linha->owner.'</td>
               <td class="text-center" style="max-width:700px; overflow:hidden; text-overflow:ellipsis;">'.$linha->obs.'</td>
               <td class="text-center">'.$linha->conformidade.'</td>
+              <td class="text-center">'.$linha->preco.'</td>
+              <td class="text-center">'.$linha->prazo.'</td>
+              <td class="text-center">'.$linha->qualidade.'</td>
+              <td class="text-center">'.$linha->obs_classif.'</td>
               <td class="text-center">'.$linha->alterador.'</td>
               <td class="text-center" style="max-width:700px; overflow:hidden; text-overflow:ellipsis;">'.$linha->motivo_rep.'</td>
               <td class="text-center">'.$linha->precounit.'</td>
@@ -1115,7 +1132,7 @@ class PDRController extends Action {
 	public function encurtaString($string) {
 		$tamanho = strlen($string);
 		if ($tamanho > 20) {
-			$string = substr($string, 0, 20) . "...";
+			$string = substr($string, 0, 35) . "...";
 		}
 		return $string;
 	}
@@ -1435,7 +1452,7 @@ class PDRController extends Action {
 				
 			} else {
 				echo "
-				<h5 class='exit'>Problemas foram encontrados ao sincronizar com o Omie, favor contaatar o Suporte!</h5>
+				<h4 class='exit'>Problemas foram encontrados ao sincronizar com o Omie, favor contatar o Suporte!</h4>
         		<a type='button' href='/aprovar' class='btn-success'>Voltar</a>
         		  ";
 			}
@@ -2204,7 +2221,7 @@ class PDRController extends Action {
                 		<div class="pVisu">';
 					foreach ($lista_pedido as $key => $pedido) {
 						if ($pedido->num_pedido != 0) {
-							echo '<p class="dont-break-out"><b>' . $pedido->num_pedido . '</b> (' . $this->encurtaString($pedido->descrprod) . ')</p>';
+							echo '<p class="dont-break-out"><b>' . $pedido->num_pedido . '</b> (' . $this->encurtaString($pedido->descrprod) . ')</p>'; //heree
 						}
 					}
 					echo '  </div>
@@ -2354,6 +2371,89 @@ class PDRController extends Action {
 		$rc = Container::getModel('RC');
 		$num = $rc->rc_nao_sincronizada();
 		return $num;
+	}
+//
+
+//Gera Planilha Excel do Relatório gerado
+	public function gerarPlanilha(){
+		$rc = Container::getModel('RC');
+		$consulta = $rc->buscaQueryPronta($_POST['sql']);
+		$arquivo = 'requisições.xls';
+		$html = '<!DOCTYPE html>
+ 			<html lang="pt-br">
+ 			<head>
+ 				<meta charset="utf-8">
+ 				<title>Tickets - Relatório</title>
+ 			</head>
+ 			<body>';
+		$html .= '<table border="1">';
+		$html .= '<tr>';
+		$html .= '<td colspan="15" ><p style="color:blue; font-weight: bold; font-size:14pt;">Requisições PDR</p></td>';
+		$html .= '</tr>';
+
+		$html .= '<tr>';
+		$html .= '<td><b>REQUISIÇÃO</b></td>';
+		$html .= '<td><b>CÓDIGO OMIE</b></td>';
+		$html .= '<td><b>CATEGORIA</b></td>';
+		$html .= '<td><b>DEPARTAMENTO</b></td>';
+		$html .= '<td><b>DATA CRIAÇÃO</b></td>';
+		$html .= '<td><b>DATA ALTERAÇÃO</b></td>';
+		$html .= '<td><b>SUGESTÃO ENTREGA</b></td>';
+		$html .= '<td><b>SOLICITANTE</b></td>';
+		$html .= '<td><b>LIBERADOR</b></td>';
+		$html .= '<td><b>OBSERVAÇÃO</b></td>';
+		$html .= '<td><b>STATUS</b></td>';
+		$html .= '<td><b>CONFORMIDADE</b></td>';
+		$html .= '<td><b>CLASF. PREÇO</b></td>';
+		$html .= '<td><b>CLASF. PRAZO</b></td>';
+		$html .= '<td><b>CLASF. QUALIDADE</b></td>';
+		$html .= '<td><b>CLASF. OBS</b></td>';
+		$html .= '<td><b>ÚLTIMA ALTERAÇÃO</b></td>';
+		$html .= '<td><b>MOTIVO REPROVAÇÃO</b></td>';
+		$html .= '<td><b>PRODUTO</b></td>';
+		$html .= '<td><b>OBS PRODUTO</b></td>';
+		$html .= '<td><b>PREÇO PRODUTO</b></td>';
+		$html .= '<td><b>QUANTIDADE PRODUTO</b></td>';
+		$html .= '<td><b>FORNECEDOR</b></td>';
+		$html .= '</tr>';
+		foreach ($consulta as $key => $linha) {
+			$html .= '<tr>';
+			$html .= '<td>' . $linha->codreq . '</td>';
+			$html .= '<td>' . $linha->cod_omie . '</td>';
+			$html .= '<td>' . $linha->descrprod . '</td>';
+			$html .= '<td>' . $linha->obsitem . '</td>';
+			$html .= '<td>' . $linha->descricao . '</td>';
+			$html .= '<td>' . $linha->dt_create . '</td>';
+			$html .= '<td>' . $linha->dt_mov . '</td>';
+			$html .= '<td>' . $linha->dtsugestao . '</td>';
+			$html .= '<td>' . $linha->solicitante . '</td>';
+			$html .= '<td>' . $linha->owner . '</td>';
+			$html .= '<td>' . $linha->obs . '</td>';
+			$html .= '<td>' . $linha->conformidade . '</td>';
+			$html .= '<td>' . $linha->preco . '</td>';
+			$html .= '<td>' . $linha->prazo . '</td>';
+			$html .= '<td>' . $linha->qualidade . '</td>';
+			$html .= '<td>' . $linha->obs_classif . '</td>';
+			$html .= '<td>' . $linha->alterador . '</td>';
+			$html .= '<td>' . $linha->precounit . '</td>';
+			$html .= '<td>' . $linha->qtde . '</td>';
+			$html .= '<td>' . $linha->fornecedor . '</td>';
+		}
+		$html .= '</table></body></html>';
+
+
+		//Configurações header para forçar o download
+		header("Expires: 0");
+		header("Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT");
+		header("Cache-Control: no-cache, must-revalidate, post-check=0, pre-check=0");
+		header("Pragma: no-cache");
+		header("Content-type: application/x-msexcel");
+		header("Content-Disposition: attachment; filename=\"{$arquivo}\"");
+		header("Content-Description:  PHP Generated Data");
+
+		//Envia o conteúdo do arquivo
+		echo $html;
+		exit;
 	}
 //
 

@@ -1,0 +1,46 @@
+#barra_progresso{
+	font-size:1px;
+	left:0;
+	width:1px;
+	position:relative;
+	top:1px;
+	height:5px;
+	background-color:#006400
+}
+
+#carregador_pai{
+	width:100%;
+	position:absolute;
+	top:40%;
+	text-align:center
+}
+
+#carregador_fundo{
+	font-size:1px;
+	left:8px;
+	width:113px;
+	position:relative;
+	top:8px;
+	height:7px;
+	background-color:#ebebe4
+}
+
+#carregador{
+	border-right:#6a6a6a 1px solid;
+	padding-right:0;
+	border-top:#6a6a6a 1px solid;
+	display:block;
+	padding-left:0;
+	font-size:11px;
+	z-index:2;
+	padding-bottom:16px;
+	margin:0 auto;
+	border-left:#6a6a6a 1px solid;
+	width:130px;
+	color:#000;
+	padding-top:10px;
+	border-bottom:#6a6a6a 1px solid;
+	font-family:Tahoma,Helvetica,sans;
+	background-color:#fff;
+	text-align:left
+}

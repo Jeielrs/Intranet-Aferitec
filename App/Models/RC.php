@@ -55,7 +55,7 @@ class RC extends Model {
 	public function alteraStatus($codreq, $status) {
 		if ($status == 6) {
 			$query = "UPDATE rc SET status = $status, conformidade = 'Recebido e Conforme' WHERE codreq = $codreq";
-		}elseif ($status == 5 or $status == 4) {
+		}elseif ($status == 5 or $status == 4 or $status == 8) {
 			$query = "UPDATE rc SET status = $status WHERE codreq = $codreq";
 		}
 		$stmt = $this->db->prepare($query);
@@ -295,7 +295,7 @@ class RC extends Model {
 	public function buscaPorUser($user) {
 		//verifica se é alex ou bárbara (Pessoal de SIC)
 		if ($user == 4 or $user == 38) {
-			$dias = 90;
+			$dias = 365;
 			$query = "SELECT DISTINCT rc.codreq, rc.cod_omie, rc.dt_mov, rc.dt_create,
 				user.nome, rc.status, rc.conformidade, status.descricao, rc.owner,
 				rc.dtsugestao, rc.obs, rc.id_user, rc.motivo_rep,
@@ -321,11 +321,11 @@ class RC extends Model {
 					FROM rc
 					WHERE id_user = $user
 					AND DATEDIFF(CURDATE(), dt_create) > 30
-					AND status = 6
+					AND status IN (6,7,8)
 				)
 				ORDER BY 1 DESC";
 		}else {
-			$dias = 122; //AQUIII
+			$dias = 365; //AQUIII
 			$query = "SELECT DISTINCT rc.codreq, rc.cod_omie, rc.dt_mov, rc.dt_create,
 				user.nome, rc.status, rc.conformidade, status.descricao, rc.owner,
 				rc.dtsugestao, rc.obs, rc.id_user, rc.motivo_rep,
@@ -350,8 +350,8 @@ class RC extends Model {
 					SELECT DISTINCT codreq
 					FROM rc
 					WHERE id_user = $user
-					AND DATEDIFF(CURDATE(), dt_create) > 30
-					AND status = 6
+					AND DATEDIFF(CURDATE(), dt_create) > 60
+					AND status IN (6,7,8)
 				)
 				ORDER BY 1 DESC";
 		}
@@ -552,7 +552,7 @@ class RC extends Model {
 		if (!$stmt->execute()) {
 			$update = "Erro ao sincronizar nº de pedido na RC $codreq : " . print_r($stmt->errorInfo(), true);
 		} else {
-			$update = "Requisição $codreq sincronizada!";
+			$update = "Requisição $codreq sincronizada, número do pedido Omie inserido!";
 		}
 
 		return $update;
