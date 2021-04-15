@@ -561,7 +561,7 @@ class RC extends Model {
 
 	//consulta quantas RC's estão aprovadas à mais de 3 dias sem sincronização com Omie
 	public function rc_nao_sincronizada() {
-		$query = "SELECT count(codreq) as  num FROM rc WHERE status = 3 AND DATEDIFF(CURDATE(), dt_mov) > 15";
+		$query = "SELECT count(codreq) as  num FROM rc WHERE status = 3 AND cod_omie = 0 AND DATEDIFF(CURDATE(), dt_mov) > 15";
 		$stmt = $this->db->prepare($query);
 		if ($stmt->execute()) {
 			$result = $stmt->fetch(\PDO::FETCH_ASSOC);

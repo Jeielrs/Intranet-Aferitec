@@ -2012,6 +2012,15 @@ class PDRController extends Action {
 
               			<div class="divVisu">
               			  <div class="divLabelVisu">
+              			    <span class="labelVisu2">DATA SOLICITAÇÃO</span>
+              			  </div>
+              			  <div class="pVisu">
+              			    <p class="dont-break-out">' . date("d/m/Y H:i:s", strtotime($modal->dt_create)) . '</p>
+              			  </div>
+              			</div>
+
+              			<div class="divVisu">
+              			  <div class="divLabelVisu">
               			    <span class="labelVisu2">DATA ALTERAÇÃO</span>
               			  </div>
               			  <div class="pVisu">
@@ -2202,7 +2211,7 @@ class PDRController extends Action {
               			</div>';
 				}
 
-				if ($rc->status >= 4) {
+				if ($rc->status >= 3) {
 					$rc_pedido = Container::getModel('itensRC');
 					$lista_pedido = $rc_pedido->buscaPedidoPesquisar($rc->codreq);
 					echo '
@@ -2294,6 +2303,15 @@ class PDRController extends Action {
               			  </div>
               			  <div class="pVisu">
               			    <p class="dont-break-out">' . $rc->alterador . '</p>
+              			  </div>
+              			</div>
+
+              			<div class="divVisu">
+              			  <div class="divLabelVisu">
+              			    <span class="labelVisu2">DATA SOLICITAÇÃO</span>
+              			  </div>
+              			  <div class="pVisu">
+              			    <p class="dont-break-out">' . date("d/m/Y H:i:s", strtotime($rc->dt_create)) . '</p>
               			  </div>
               			</div>
 
